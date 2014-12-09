@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/exploded-aar/WeatherNow/cardViewLib/unspecified/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="bf3a107a1096314a181d7ef6b042e5d3f977931e">
+        <dex dex="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/pre-dexed/debug/classes-3ce440a224fcf1ccbdf7b1cba9392a93137e319f.jar" />
+    </item>
+    <item
+        jar="/Users/abhishekrai/Development/Android/android-sdk-macosx/extras/android/m2repository/com/android/support/support-annotations/21.0.2/support-annotations-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="99373741f99a0556ee293c41e8faa1ca3ae8a4e6">
+        <dex dex="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/pre-dexed/debug/support-annotations-21.0.2-469b9488b95f3e32396b3a360c4331256da6fc5c.jar" />
+    </item>
+    <item
+        jar="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/exploded-aar/com.android.support/cardview-v7/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="b017100da14f9c158c9f5f2f508333c224b24a7c">
+        <dex dex="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/pre-dexed/debug/classes-74a308677a31b9450ef5464de014ebd43da483c1.jar" />
+    </item>
+    <item
+        jar="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="d1bf02de1c56d942e7a9d093b8610ba1ef4128e3">
+        <dex dex="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/pre-dexed/debug/classes-d7e34c67881d3afc777f370008f7dce4b2ae9a99.jar" />
+    </item>
+    <item
+        jar="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/exploded-aar/com.android.support/support-v4/21.0.2/libs/internal_impl-21.0.2.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="962e8b12569c56dbdcf8367eb4eac8bb129cd18f">
+        <dex dex="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/pre-dexed/debug/internal_impl-21.0.2-fe804e9754a7c5d8351e9e53876ac95bc89ea6d9.jar" />
+    </item>
+    <item
+        jar="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/exploded-aar/com.google.android.gms/play-services/6.5.87/classes.jar"
+        jumboMode="false"
+        revision="21.1.1"
+        sha1="dd9247ea0fabe8ee479638c4b4a23e93752be256">
+        <dex dex="/Users/abhishekrai/AndroidstudioProjects/WeatherNow/weatherNow/build/intermediates/pre-dexed/debug/classes-6f52d1ba61010af0eb6b7b938b4792138af7f43a.jar" />
+    </item>
+
+</items>

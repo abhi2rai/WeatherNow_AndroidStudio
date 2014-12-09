@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/WeatherNow.iml" filepath="$PROJECT_DIR$/WeatherNow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cardViewLib/cardViewLib.iml" filepath="$PROJECT_DIR$/cardViewLib/cardViewLib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/weatherNow/weatherNow.iml" filepath="$PROJECT_DIR$/weatherNow/weatherNow.iml" />
+    </modules>
+  </component>
+</project>
+
