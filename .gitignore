@@ -1,0 +1,4 @@
+weatherNow/build/*
+cardViewLib/build/*
+.gradle/2.2.1/*
+.idea/*
