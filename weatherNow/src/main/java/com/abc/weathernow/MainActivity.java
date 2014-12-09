@@ -56,6 +56,7 @@ public class MainActivity extends FragmentActivity implements
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
+        mGoogleApiClient.connect();
     }
 
     @Override
@@ -76,9 +77,11 @@ public class MainActivity extends FragmentActivity implements
     public void onConnected(Bundle bundle) {
 
         mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         mLocationRequest.setInterval(1000); // Update location every second
 
+        Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        updateUI(loc);
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
     }
