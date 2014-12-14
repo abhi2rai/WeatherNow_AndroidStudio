@@ -14,14 +14,9 @@ public class WeatherHttpClient {
 	public String getWeatherData(String location) {
 		HttpURLConnection con = null ;
 		InputStream is = null;
-		
-		String[] parts = location.split("@");
-		String latitude = parts[0];
-		String longitude = parts[1];
 
 		try {
-			con = (HttpURLConnection) ( new URL(BASE_URL + "lat=" + latitude + "&lon="+ 
-					longitude + "&type=accurate")).openConnection();
+			con = (HttpURLConnection) ( new URL(BASE_URL + "q=" + location + "&type=accurate")).openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("x-api-key", "54b8edccc652317dcb64c02bc99dda8a");
 			con.setDoInput(true);

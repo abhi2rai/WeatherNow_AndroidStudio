@@ -10,7 +10,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import android.content.Context;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,22 +17,23 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.TextView;
 import android.location.Location;
 import android.util.Log;
-
+import android.widget.Toast;
+import android.location.Geocoder;
+import java.util.Locale;
+import android.location.Address;
+import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
-
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
-	protected Context context;
 	private TextView weatherIcon;
 	private TextView temp;
 	private TextView condition;
 	private TextView cityName;
-    private TextView sunriseTime;
-    private TextView sunsetTime;
 	Typeface weatherFont;
 
     private final String TAG = "MyAwesomeApp";
@@ -77,7 +77,7 @@ public class MainActivity extends FragmentActivity implements
     public void onConnected(Bundle bundle) {
 
         mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
         mLocationRequest.setInterval(1000); // Update location every second
 
         Location loc = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -102,7 +102,7 @@ public class MainActivity extends FragmentActivity implements
     }
 	
 	private void updateUI(Location loc){
-		String city = String.valueOf(loc.getLatitude()) + "@" + String.valueOf(loc.getLongitude());
+		String city = getCityName(loc);
         JSONWeatherTask task = new JSONWeatherTask();
 		task.execute(new String[]{city});
 	}
@@ -135,6 +135,23 @@ public class MainActivity extends FragmentActivity implements
 	    }
 	    weatherIcon.setText(icon);
 	}
+
+    private String getCityName(Location location)
+    {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        String addressString = "not found !!";
+        try {
+            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            if (addressList.size() > 0) {
+                Address address = addressList.get(0);
+                addressString = address.getLocality().toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        Toast.makeText(this, " Your Location is " + addressString, Toast.LENGTH_LONG).show();
+        return addressString;
+    }
     
 private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 		
