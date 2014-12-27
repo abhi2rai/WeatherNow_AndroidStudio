@@ -7,9 +7,19 @@
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="21" />
-	<uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -23,6 +33,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".two_text_components"
+            android:label="@string/title_activity_two_text_components" >
+        </activity>
+        <activity
+            android:name=".CustomListCell"
+            android:label="@string/title_activity_custom_list_cell" >
+        </activity>
+        <activity
+            android:name=".CardLayout"
+            android:label="@string/title_activity_card_layout" >
         </activity>
     </application>
 

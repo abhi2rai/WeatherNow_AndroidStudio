@@ -1,6 +1,7 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -12,76 +13,101 @@
     <android.support.v7.widget.CardView
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
-        android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        card_view:cardElevation="5dp"
+        android:layout_height="176sp"
+        card_view:cardElevation="5sp"
         card_view:cardBackgroundColor="@color/cardColor"
-        card_view:cardCornerRadius="1dp">
+        card_view:cardCornerRadius="1sp">
         <TableRow
         android:id="@+id/tableRow1"
         android:layout_height="wrap_content"
-        android:paddingTop="6dp"
-        android:layout_gravity="center"
-        android:paddingLeft="6dp"
-    	android:paddingRight="6dp"
+        android:paddingTop="6sp"
+        android:paddingLeft="6sp"
+    	android:paddingRight="6sp"
         android:layout_width="match_parent"
         android:weightSum="1">
 
-            <TextView
-                android:id="@+id/weather_icon"
-                android:layout_width="0dp"
+            <TableLayout
+                android:id="@+id/tableRow2"
                 android:layout_height="match_parent"
                 android:layout_weight="0.4"
-                android:gravity="center"
-                android:textSize="64sp" />
+                android:layout_width="0sp"
+                android:weightSum="1"
+                android:stretchColumns="*"
+                android:paddingLeft="6sp"
+                android:paddingRight="6sp">
+                <TextView
+                    android:id="@+id/weather_icon"
+                    android:layout_width="0sp"
+                    android:layout_height="112sp"
+                    android:layout_weight="0.4"
+                    android:gravity="center"
+                    android:textSize="88sp" />
+                <TextView
+                    android:id="@+id/weather_status"
+                    android:text="@string/app_name"
+                    android:gravity="center"
+                    android:height="48sp"
+                    android:textColor="@color/primaryTextColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </TableLayout>
 
 	        <TableLayout
-		        android:id="@+id/tableRow2"
+		        android:id="@+id/tableRow3"
 		        android:layout_height="match_parent"
 		        android:layout_weight="0.6"
-		        android:layout_width="0dp"
+		        android:layout_width="0sp"
 		        android:weightSum="1"
 		        android:stretchColumns="*"
-		        android:paddingLeft="6dp"
-		    	android:paddingRight="6dp">
+		        android:paddingLeft="6sp"
+		    	android:paddingRight="6sp">
 		    	<TableRow
-		            android:layout_height="0dp"
+		            android:layout_height="0sp"
 		            android:layout_weight="0.2">
 			        <TextView
 			            android:id="@+id/city_name"
 			            android:text="@string/app_name"
 			            android:gravity="center"
-			            android:textColor="@color/primaryTextColor"
+                        android:height="64sp"
+                        android:textSize="24sp"
+			            android:textColor="@color/primaryDarkDef"
 			            android:layout_width="match_parent"
 			            android:layout_height="wrap_content" />
 			    </TableRow>
 		        <TableRow
-		            android:layout_height="0dp"
+		            android:layout_height="0sp"
 		            android:layout_weight="0.2">
 			        <TextView
 			            android:id="@+id/info_text"
 			            android:text="@string/app_name"
 			            android:gravity="center"
+                        android:height="48sp"
+                        android:textSize="22sp"
 			            android:textColor="@color/primaryTextColor"
 			            android:layout_width="match_parent"
 			            android:layout_height="wrap_content" />
 			    </TableRow>
 			    <TableRow
-			        android:layout_height="0dp"
+			        android:layout_height="0sp"
 		            android:layout_weight="0.2">
 			        <TextView
-			            android:id="@+id/condition"
+			            android:id="@+id/wind_speed"
 			            android:text="@string/app_name"
 			            android:gravity="center"
+                        android:height="48sp"
 			            android:textColor="@color/primaryTextColor"
 			            android:layout_width="match_parent"
 			            android:layout_height="wrap_content" />
 				</TableRow>
 		  </TableLayout>
-	     
         </TableRow>
-
     </android.support.v7.widget.CardView>
 
-</RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>

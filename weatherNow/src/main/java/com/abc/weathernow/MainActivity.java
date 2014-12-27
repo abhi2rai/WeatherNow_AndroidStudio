@@ -1,8 +1,17 @@
 package com.abc.weathernow;
 
-import java.util.Date;
-
-import org.json.JSONException;
+import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -10,44 +19,50 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import android.graphics.Typeface;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.widget.TextView;
-import android.location.Location;
-import android.util.Log;
-import android.widget.Toast;
-import android.location.Geocoder;
-import java.util.Locale;
-import android.location.Address;
+import org.json.JSONException;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends FragmentActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener{
+    private final String TAG = "WeatherNow";
+	Typeface weatherFont;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 	private TextView weatherIcon;
 	private TextView temp;
-	private TextView condition;
+	private TextView windSpeed;
 	private TextView cityName;
-	Typeface weatherFont;
-
-    private final String TAG = "MyAwesomeApp";
+    private TextView weatherStatus;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+
         weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weather.ttf");
+
+        InfoCardAdapter ca = new InfoCardAdapter(createList(30),weatherFont);
+        recList.setAdapter(ca);
         
         weatherIcon = (TextView) findViewById(R.id.weather_icon);
         temp = (TextView) findViewById(R.id.info_text);
-        condition = (TextView) findViewById(R.id.condition);
+        windSpeed = (TextView) findViewById(R.id.wind_speed);
         cityName = (TextView) findViewById(R.id.city_name);
+        weatherStatus = (TextView) findViewById(R.id.weather_status);
         
         weatherIcon.setTypeface(weatherFont);
 
@@ -106,7 +121,7 @@ public class MainActivity extends FragmentActivity implements
         JSONWeatherTask task = new JSONWeatherTask();
 		task.execute(new String[]{city});
 	}
-	
+
 	private void setWeatherIcon(int actualId, long sunrise, long sunset){
 	    int id = actualId / 100;
 	    String icon = "";
@@ -152,6 +167,21 @@ public class MainActivity extends FragmentActivity implements
         Toast.makeText(this, " Your Location is " + addressString, Toast.LENGTH_LONG).show();
         return addressString;
     }
+
+    private List<WeatherInfo> createList(int size) {
+
+        List<WeatherInfo> result = new ArrayList<WeatherInfo>();
+        for (int i=1; i <= size; i++) {
+            WeatherInfo ci = new WeatherInfo();
+            ci.weatherIcon = getResources().getString(R.string.weather_sunny);
+            ci.infoText = i+"° C";
+            ci.windSpeed = "Wind "+(i*1.75)+"mph/Precip. 55%";
+            result.add(ci);
+
+        }
+
+        return result;
+    }
     
 private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 		
@@ -173,11 +203,18 @@ private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 	@Override
 		protected void onPostExecute(Weather weather) {			
 			super.onPostExecute(weather);
-			temp.setText("" + Math.round((weather.temperature.getTemp() - 273.15)) + "\u00b0 C"+"   ("+weather.currentCondition.getCondition()+")");
-			condition.setText(weather.wind.getSpeed()+" mph");
+			temp.setText("" + getRoundedValue(weather.temperature.getTemp()) + "\u00b0 C ("+
+                    getRoundedValue(weather.temperature.getMaxTemp()) + "°/" + getRoundedValue(weather.temperature.getMinTemp()) + "°)");
+			windSpeed.setText("Wind "+weather.wind.getSpeed()+"mph" + "/Precip. " + weather.clouds.getPerc() +"%");
 			cityName.setText(weather.location.getCity()+", "+weather.location.getCountry());
+            weatherStatus.setText(weather.currentCondition.getCondition());
 			setWeatherIcon(weather.currentCondition.getWeatherId(),weather.location.getSunrise(),weather.location.getSunset());
 		}
+
+    private int getRoundedValue(float num)
+    {
+        return (int)Math.round(num - 273.15);
+    }
 	
   }
 }

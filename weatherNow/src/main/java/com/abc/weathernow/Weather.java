@@ -109,18 +109,18 @@ public class Weather {
 	
 	public  class Rain {
 		private String time;
-		private float ammount;
+		private float amount;
 		public String getTime() {
 			return time;
 		}
 		public void setTime(String time) {
 			this.time = time;
 		}
-		public float getAmmount() {
-			return ammount;
+		public float getAmount() {
+			return amount;
 		}
-		public void setAmmount(float ammount) {
-			this.ammount = ammount;
+		public void setAmount(float amount) {
+			this.amount = amount;
 		}
 		
 		
@@ -129,7 +129,7 @@ public class Weather {
 
 	public  class Snow {
 		private String time;
-		private float ammount;
+		private float amount;
 		
 		public String getTime() {
 			return time;
@@ -137,11 +137,11 @@ public class Weather {
 		public void setTime(String time) {
 			this.time = time;
 		}
-		public float getAmmount() {
-			return ammount;
+		public float getAmount() {
+			return amount;
 		}
-		public void setAmmount(float ammount) {
-			this.ammount = ammount;
+		public void setAmount(float amount) {
+			this.amount = amount;
 		}
 		
 		
