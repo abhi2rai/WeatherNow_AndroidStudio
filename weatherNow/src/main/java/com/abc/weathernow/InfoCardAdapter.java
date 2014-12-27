@@ -35,6 +35,8 @@ public class InfoCardAdapter extends RecyclerView.Adapter<InfoCardAdapter.InfoCa
         infoCardHolder.weatherIcon.setText(ci.weatherIcon);
         infoCardHolder.infoText.setText(ci.infoText);
         infoCardHolder.windSpeed.setText(ci.windSpeed);
+        infoCardHolder.status.setText(ci.status);
+        infoCardHolder.day.setText(ci.day);
     }
 
     @Override
@@ -51,12 +53,16 @@ public class InfoCardAdapter extends RecyclerView.Adapter<InfoCardAdapter.InfoCa
         protected TextView weatherIcon;
         protected TextView infoText;
         protected TextView windSpeed;
+        protected TextView status;
+        protected TextView day;
 
         public InfoCardHolder(View v) {
             super(v);
             weatherIcon =  (TextView) v.findViewById(R.id.weather_icon);
             infoText = (TextView)  v.findViewById(R.id.info_text);
             windSpeed = (TextView)  v.findViewById(R.id.wind_speed);
+            status = (TextView) v.findViewById(R.id.weather_status);
+            day = (TextView) v.findViewById(R.id.day);
         }
     }
 }

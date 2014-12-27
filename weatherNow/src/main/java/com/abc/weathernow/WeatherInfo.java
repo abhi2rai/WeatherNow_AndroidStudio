@@ -7,4 +7,6 @@ public class WeatherInfo {
     protected String weatherIcon;
     protected String infoText;
     protected String windSpeed;
+    protected String status;
+    protected String day;
 }

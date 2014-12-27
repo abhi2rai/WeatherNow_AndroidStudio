@@ -6,12 +6,12 @@ package com.abc.weathernow;
 public class Forecast {
 
     Weather weather = new Weather();
-    float date;
+    long date;
 
-    public float getDate() {
+    public long getDate() {
         return date;
     }
     public void setDate(float date) {
-        this.date = date;
+        this.date = (long)date;
     }
 }

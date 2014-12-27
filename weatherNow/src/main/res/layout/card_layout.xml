@@ -28,10 +28,18 @@
             <TextView
                 android:id="@+id/weather_icon"
                 android:layout_width="0sp"
-                android:layout_height="75sp"
+                android:layout_height="60sp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textSize="60sp" />
+                android:textSize="54sp" />
+            <TextView
+                android:id="@+id/weather_status"
+                android:text="@string/app_name"
+                android:gravity="center"
+                android:height="48sp"
+                android:textColor="@color/primaryTextColor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </TableLayout>
 
         <TableLayout
@@ -46,25 +54,37 @@
                 android:layout_height="0sp"
                 android:layout_weight="0.5">
                 <TextView
-                    android:id="@+id/info_text"
+                    android:id="@+id/day"
                     android:text="@string/app_name"
                     android:gravity="center"
                     android:height="48sp"
                     android:textSize="22sp"
-                    android:textColor="@color/primaryTextColor"
+                    android:textColor="@color/primaryDarkDef"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_span="2" />
             </TableRow>
             <TableRow
                 android:layout_height="0sp"
+                android:weightSum="1"
                 android:layout_weight="0.5">
+                <TextView
+                    android:id="@+id/info_text"
+                    android:text="@string/app_name"
+                    android:height="48sp"
+                    android:textSize="22sp"
+                    android:layout_weight="0.5"
+                    android:textColor="@color/primaryTextColor"
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/wind_speed"
                     android:text="@string/app_name"
-                    android:gravity="center"
                     android:height="48sp"
+                    android:textSize="22sp"
+                    android:layout_weight="0.5"
                     android:textColor="@color/primaryTextColor"
-                    android:layout_width="match_parent"
+                    android:layout_width="0sp"
                     android:layout_height="wrap_content" />
             </TableRow>
         </TableLayout>

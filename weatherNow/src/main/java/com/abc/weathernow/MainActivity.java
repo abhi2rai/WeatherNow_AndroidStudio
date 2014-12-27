@@ -22,6 +22,7 @@ import com.google.android.gms.location.LocationServices;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -167,6 +168,10 @@ public class MainActivity extends FragmentActivity implements
         return addressString;
     }
 
+    private String getDay(long timestamp){
+        return new SimpleDateFormat("EEEE").format(new Date(timestamp * 1000));
+    }
+
     private int getRoundedValue(float num)
     {
         return (int)Math.round(num - 273.15);
@@ -234,7 +239,9 @@ public class MainActivity extends FragmentActivity implements
                     WeatherInfo ci = new WeatherInfo();
                     ci.weatherIcon = setWeatherIcon(forecastList.get(i).weather.currentCondition.getWeatherId(), 0, 0);
                     ci.infoText = getRoundedValue(forecastList.get(i).weather.temperature.getMaxTemp()) + "°/" + getRoundedValue(forecastList.get(i).weather.temperature.getMinTemp()) + "°";
-                    ci.windSpeed = "Wind "+forecastList.get(i).weather.wind.getSpeed()+"mph";
+                    ci.windSpeed =forecastList.get(i).weather.wind.getSpeed()+"mph";
+                    ci.status = forecastList.get(i).weather.currentCondition.getCondition();
+                    ci.day = getDay(forecastList.get(i).date);
                     result.add(ci);
 
                 }
