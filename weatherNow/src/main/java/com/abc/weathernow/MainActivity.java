@@ -35,6 +35,7 @@ public class MainActivity extends FragmentActivity implements
 	Typeface weatherFont;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
+    RecyclerView recList;
 	private TextView weatherIcon;
 	private TextView temp;
 	private TextView windSpeed;
@@ -46,17 +47,13 @@ public class MainActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
-        recList.setHasFixedSize(true);
-
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList = (RecyclerView) findViewById(R.id.cardList);
+        recList.setHasFixedSize(true);
         recList.setLayoutManager(llm);
 
         weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weather.ttf");
-
-        InfoCardAdapter ca = new InfoCardAdapter(createList(30),weatherFont);
-        recList.setAdapter(ca);
         
         weatherIcon = (TextView) findViewById(R.id.weather_icon);
         temp = (TextView) findViewById(R.id.info_text);
@@ -120,9 +117,11 @@ public class MainActivity extends FragmentActivity implements
 		String city = getCityName(loc);
         JSONWeatherTask task = new JSONWeatherTask();
 		task.execute(new String[]{city});
+        JSONForecastTask forecastTask = new JSONForecastTask();
+        forecastTask.execute(new String[]{city});
 	}
 
-	private void setWeatherIcon(int actualId, long sunrise, long sunset){
+	private String setWeatherIcon(int actualId, long sunrise, long sunset){
 	    int id = actualId / 100;
 	    String icon = "";
 	    if(actualId == 800){
@@ -148,7 +147,7 @@ public class MainActivity extends FragmentActivity implements
 	                 break;
 	        }
 	    }
-	    weatherIcon.setText(icon);
+	    return icon;
 	}
 
     private String getCityName(Location location)
@@ -168,32 +167,22 @@ public class MainActivity extends FragmentActivity implements
         return addressString;
     }
 
-    private List<WeatherInfo> createList(int size) {
-
-        List<WeatherInfo> result = new ArrayList<WeatherInfo>();
-        for (int i=1; i <= size; i++) {
-            WeatherInfo ci = new WeatherInfo();
-            ci.weatherIcon = getResources().getString(R.string.weather_sunny);
-            ci.infoText = i+"° C";
-            ci.windSpeed = "Wind "+(i*1.75)+"mph/Precip. 55%";
-            result.add(ci);
-
-        }
-
-        return result;
+    private int getRoundedValue(float num)
+    {
+        return (int)Math.round(num - 273.15);
     }
     
-private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
+    private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 		
 		@Override
 		protected Weather doInBackground(String... params) {
-			Weather weather = new Weather();
+            Weather weather = new Weather();
 			String data = ( (new WeatherHttpClient()).getWeatherData(params[0]));
-
+            String forecast = ( (new WeatherHttpClient()).getForecast(params[0]));
 			try {
 				weather = JSONWeatherParser.getWeather(data);
-				
-			} catch (JSONException e) {				
+                List<Forecast> forecastList = JSONWeatherParser.getForecastData(forecast);
+			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 			return weather;
@@ -201,20 +190,62 @@ private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 	}
 		
 	@Override
-		protected void onPostExecute(Weather weather) {			
+		protected void onPostExecute(Weather weather) {
 			super.onPostExecute(weather);
-			temp.setText("" + getRoundedValue(weather.temperature.getTemp()) + "\u00b0 C ("+
+        try{
+            temp.setText("" + getRoundedValue(weather.temperature.getTemp()) + "\u00b0 C ("+
                     getRoundedValue(weather.temperature.getMaxTemp()) + "°/" + getRoundedValue(weather.temperature.getMinTemp()) + "°)");
-			windSpeed.setText("Wind "+weather.wind.getSpeed()+"mph" + "/Precip. " + weather.clouds.getPerc() +"%");
-			cityName.setText(weather.location.getCity()+", "+weather.location.getCountry());
+            windSpeed.setText("Wind "+weather.wind.getSpeed()+"mph" + "/Precip. " + weather.clouds.getPerc() +"%");
+            cityName.setText(weather.location.getCity()+", "+weather.location.getCountry());
             weatherStatus.setText(weather.currentCondition.getCondition());
-			setWeatherIcon(weather.currentCondition.getWeatherId(),weather.location.getSunrise(),weather.location.getSunset());
-		}
+            weatherIcon.setText(setWeatherIcon(weather.currentCondition.getWeatherId(), weather.location.getSunrise(), weather.location.getSunset()));
 
-    private int getRoundedValue(float num)
-    {
-        return (int)Math.round(num - 273.15);
-    }
-	
+//            InfoCardAdapter ca = new InfoCardAdapter(createList(obj.forecastList),weatherFont);
+//            recList.setAdapter(ca);
+        }
+        catch(Exception e){
+            Log.i("MainActivity", "Caught Exception " + e);
+        }
+
+		}
   }
+
+    private class JSONForecastTask extends AsyncTask<String, Void, List<Forecast>> {
+
+        @Override
+        protected List<Forecast> doInBackground(String... params) {
+            String forecast = ( (new WeatherHttpClient()).getForecast(params[0]));
+            List<Forecast> forecastList = new ArrayList<Forecast>();
+            try {
+                forecastList = JSONWeatherParser.getForecastData(forecast);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return forecastList;
+
+        }
+
+        @Override
+        protected void onPostExecute(List<Forecast> forecastList) {
+            super.onPostExecute(forecastList);
+            try{
+                List<WeatherInfo> result = new ArrayList<WeatherInfo>();
+                for (int i=0; i < forecastList.size(); i++) {
+                    WeatherInfo ci = new WeatherInfo();
+                    ci.weatherIcon = setWeatherIcon(forecastList.get(i).weather.currentCondition.getWeatherId(), 0, 0);
+                    ci.infoText = getRoundedValue(forecastList.get(i).weather.temperature.getMaxTemp()) + "°/" + getRoundedValue(forecastList.get(i).weather.temperature.getMinTemp()) + "°";
+                    ci.windSpeed = "Wind "+forecastList.get(i).weather.wind.getSpeed()+"mph";
+                    result.add(ci);
+
+                }
+                InfoCardAdapter ca = new InfoCardAdapter(result,weatherFont);
+                recList.setAdapter(ca);
+            }
+            catch(Exception e){
+                Log.i("MainActivity", "Caught Exception " + e);
+            }
+
+        }
+
+    }
 }

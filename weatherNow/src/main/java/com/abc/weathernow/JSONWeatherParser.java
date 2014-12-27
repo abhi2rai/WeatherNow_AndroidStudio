@@ -4,6 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class JSONWeatherParser {
 
 	public static Weather getWeather(String data) throws JSONException  {
@@ -54,7 +57,35 @@ public class JSONWeatherParser {
 		
 		return weather;
 	}
-	
+
+    public static List<Forecast> getForecastData(String data) throws JSONException  {
+        List<Forecast> forecastList = new ArrayList<Forecast>();
+        // We create out JSONObject from the data
+        JSONObject jObj = new JSONObject(data);
+        JSONArray forecastArray = jObj.getJSONArray("list");
+
+        for(int i = 0 ; i < forecastArray.length();i++){
+            Forecast forecast = new Forecast();
+            JSONObject tempObj = getObject("temp", forecastArray.getJSONObject(i));
+            forecast.weather.temperature.setMaxTemp(getFloat("max", tempObj));
+            forecast.weather.temperature.setMinTemp(getFloat("min", tempObj));
+            JSONObject mainObj = forecastArray.getJSONObject(i);
+            forecast.setDate(getFloat("dt",mainObj));
+            forecast.weather.currentCondition.setPressure(getInt("pressure", mainObj));
+            forecast.weather.currentCondition.setHumidity(getInt("humidity", mainObj));
+            forecast.weather.wind.setSpeed(getFloat("speed", mainObj));
+            forecast.weather.wind.setDeg(getFloat("deg", mainObj));
+            JSONArray jArr = mainObj.getJSONArray("weather");
+            // We use only the first value
+            JSONObject JSONWeather = jArr.getJSONObject(0);
+            forecast.weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
+            forecast.weather.currentCondition.setDescr(getString("description", JSONWeather));
+            forecast.weather.currentCondition.setCondition(getString("main", JSONWeather));
+            forecast.weather.currentCondition.setIcon(getString("icon", JSONWeather));
+            forecastList.add(forecast);
+        }
+        return forecastList;
+    }
 	
 	private static JSONObject getObject(String tagName, JSONObject jObj)  throws JSONException {
 		JSONObject subObj = jObj.getJSONObject(tagName);
