@@ -10,6 +10,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +44,7 @@ public class MainActivity extends FragmentActivity implements
 	private TextView windSpeed;
 	private TextView cityName;
     private TextView weatherStatus;
+    private LinearLayout headerProgress;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class MainActivity extends FragmentActivity implements
         recList.setLayoutManager(llm);
 
         weatherFont = Typeface.createFromAsset(getAssets(), "fonts/weather.ttf");
-        
+        headerProgress = (LinearLayout) findViewById(R.id.headerProgress);
         weatherIcon = (TextView) findViewById(R.id.weather_icon);
         temp = (TextView) findViewById(R.id.info_text);
         windSpeed = (TextView) findViewById(R.id.wind_speed);
@@ -70,6 +73,7 @@ public class MainActivity extends FragmentActivity implements
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
+        headerProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -204,9 +208,6 @@ public class MainActivity extends FragmentActivity implements
             cityName.setText(weather.location.getCity()+", "+weather.location.getCountry());
             weatherStatus.setText(weather.currentCondition.getCondition());
             weatherIcon.setText(setWeatherIcon(weather.currentCondition.getWeatherId(), weather.location.getSunrise(), weather.location.getSunset()));
-
-//            InfoCardAdapter ca = new InfoCardAdapter(createList(obj.forecastList),weatherFont);
-//            recList.setAdapter(ca);
         }
         catch(Exception e){
             Log.i("MainActivity", "Caught Exception " + e);
@@ -247,6 +248,7 @@ public class MainActivity extends FragmentActivity implements
                 }
                 InfoCardAdapter ca = new InfoCardAdapter(result,weatherFont);
                 recList.setAdapter(ca);
+                headerProgress.setVisibility(View.GONE);
             }
             catch(Exception e){
                 Log.i("MainActivity", "Caught Exception " + e);
