@@ -1,9 +1,14 @@
 package com.abc.weathernow;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -21,9 +26,6 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +47,7 @@ public class MainActivity extends FragmentActivity implements
 	private TextView cityName;
     private TextView weatherStatus;
     private LinearLayout headerProgress;
+    private AlertDialog.Builder alertDialog;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +67,9 @@ public class MainActivity extends FragmentActivity implements
         windSpeed = (TextView) findViewById(R.id.wind_speed);
         cityName = (TextView) findViewById(R.id.city_name);
         weatherStatus = (TextView) findViewById(R.id.weather_status);
-        
         weatherIcon.setTypeface(weatherFont);
+
+        headerProgress.setVisibility(View.VISIBLE);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -73,7 +77,6 @@ public class MainActivity extends FragmentActivity implements
                 .addOnConnectionFailedListener(this)
                 .build();
         mGoogleApiClient.connect();
-        headerProgress.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -119,12 +122,30 @@ public class MainActivity extends FragmentActivity implements
     }
 	
 	private void updateUI(Location loc){
-		String city = getCityName(loc);
-        JSONWeatherTask task = new JSONWeatherTask();
-		task.execute(new String[]{city});
-        JSONForecastTask forecastTask = new JSONForecastTask();
-        forecastTask.execute(new String[]{city});
+        if(isConnected())
+        {
+            String city = getCityName(loc);
+            if(city != "")
+            {
+                JSONWeatherTask task = new JSONWeatherTask();
+                task.execute(new String[]{city});
+                JSONForecastTask forecastTask = new JSONForecastTask();
+                forecastTask.execute(new String[]{city});
+            }
+        }
+        else{
+            showAlertDialog();
+        }
 	}
+
+    private boolean isConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected())
+            return true;
+        else
+            return false;
+    }
 
 	private String setWeatherIcon(int actualId, long sunrise, long sunset){
 	    int id = actualId / 100;
@@ -158,17 +179,18 @@ public class MainActivity extends FragmentActivity implements
     private String getCityName(Location location)
     {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        String addressString = "not found !!";
+        String addressString = "";
         try {
             List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
             if (addressList.size() > 0) {
                 Address address = addressList.get(0);
                 addressString = address.getLocality().toString();
+                Toast.makeText(this, " Your Location is " + addressString, Toast.LENGTH_LONG).show();
             }
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (Exception e) {
+            showAlertDialog();
+            e.printStackTrace();
         }
-        Toast.makeText(this, " Your Location is " + addressString, Toast.LENGTH_LONG).show();
         return addressString;
     }
 
@@ -180,18 +202,32 @@ public class MainActivity extends FragmentActivity implements
     {
         return (int)Math.round(num - 273.15);
     }
+
+    private void showAlertDialog()
+    {
+        if( alertDialog != null ) return;
+        alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Oops!");
+        alertDialog.setMessage("Unable to connect. Please try again later.");
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+            }
+        });
+        alertDialog.setCancelable(false);
+        alertDialog.show();
+    }
     
     private class JSONWeatherTask extends AsyncTask<String, Void, Weather> {
 		
 		@Override
 		protected Weather doInBackground(String... params) {
             Weather weather = new Weather();
-			String data = ( (new WeatherHttpClient()).getWeatherData(params[0]));
-            String forecast = ( (new WeatherHttpClient()).getForecast(params[0]));
 			try {
+                String data = ( (new WeatherHttpClient()).getWeatherData(params[0]));
 				weather = JSONWeatherParser.getWeather(data);
-                List<Forecast> forecastList = JSONWeatherParser.getForecastData(forecast);
-			} catch (JSONException e) {
+			} catch (Exception e) {
+                showAlertDialog();
 				e.printStackTrace();
 			}
 			return weather;
@@ -220,11 +256,12 @@ public class MainActivity extends FragmentActivity implements
 
         @Override
         protected List<Forecast> doInBackground(String... params) {
-            String forecast = ( (new WeatherHttpClient()).getForecast(params[0]));
             List<Forecast> forecastList = new ArrayList<Forecast>();
             try {
+                String forecast = ( (new WeatherHttpClient()).getForecast(params[0]));
                 forecastList = JSONWeatherParser.getForecastData(forecast);
-            } catch (JSONException e) {
+            } catch (Exception e) {
+                showAlertDialog();
                 e.printStackTrace();
             }
             return forecastList;
