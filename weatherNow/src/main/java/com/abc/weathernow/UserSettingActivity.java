@@ -105,6 +105,7 @@ public class UserSettingActivity extends PreferenceActivity {
         // their values. When their values change, their summaries are updated
         // to reflect the new value, per the Android Design guidelines.
         bindPreferenceSummaryToValue(findPreference("temperature_list"));
+        bindPreferenceSummaryToValue(findPreference("days_list"));
         bindPreferenceSummaryToValue(findPreference("sync_frequency"));
     }
 

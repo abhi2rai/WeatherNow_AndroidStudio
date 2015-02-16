@@ -285,7 +285,7 @@ public class MainActivity extends FragmentActivity implements
         protected List<Forecast> doInBackground(Double... params) {
             List<Forecast> forecastList = new ArrayList<Forecast>();
             try {
-                String forecast = ((new WeatherHttpClient()).getForecast(params[0],params[1],sharedPrefs.getString("temperature_list", "NULL")));
+                String forecast = (new WeatherHttpClient()).getForecast(params[0],params[1],sharedPrefs.getString("temperature_list", "NULL"),sharedPrefs.getString("days_list", "NULL"));
                 forecastList = JSONWeatherParser.getForecastData(forecast);
             } catch (Exception e) {
                 showAlertDialog();

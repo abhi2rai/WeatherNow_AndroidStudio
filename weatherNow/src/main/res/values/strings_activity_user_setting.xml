@@ -16,6 +16,36 @@
         <item>imperial</item>
     </string-array>
 
+    <string name="pref_title_days_list">Number of Days of Forecast</string>
+    <string-array name="pref_days_list">
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+    </string-array>
+    <string-array name="pref_days_list_values">
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+    </string-array>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Sync</string>
 

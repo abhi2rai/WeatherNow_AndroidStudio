@@ -12,4 +12,13 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null" />
 
+    <ListPreference
+        android:key="days_list"
+        android:title="@string/pref_title_days_list"
+        android:defaultValue="7"
+        android:entries="@array/pref_days_list"
+        android:entryValues="@array/pref_days_list_values"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null" />
+
 </PreferenceScreen>

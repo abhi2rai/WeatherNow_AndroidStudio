@@ -47,12 +47,12 @@ public class WeatherHttpClient {
 				
 	}
 
-    public String getForecast(Double latitude,Double longitude, String unitSystem) {
+    public String getForecast(Double latitude,Double longitude, String unitSystem,String daysOfForecast) {
         HttpURLConnection con = null ;
         InputStream is = null;
 
         try {
-            con = (HttpURLConnection) ( new URL(FORECAST_URL + "lat=" + latitude +"&lon="+longitude+ "&type=accurate&cnt=7&units="+unitSystem)).openConnection();
+            con = (HttpURLConnection) ( new URL(FORECAST_URL + "lat=" + latitude +"&lon="+longitude+ "&type=accurate&cnt="+daysOfForecast+"&units="+unitSystem)).openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("x-api-key", "54b8edccc652317dcb64c02bc99dda8a");
             con.setDoInput(true);
