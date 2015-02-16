@@ -46,6 +46,14 @@
             android:name=".CardLayout"
             android:label="@string/title_activity_card_layout" >
         </activity>
+        <activity
+            android:name=".UserSettingActivity"
+            android:label="@string/title_activity_user_setting"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.abc.weathernow.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

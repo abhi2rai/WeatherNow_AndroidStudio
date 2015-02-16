@@ -11,12 +11,12 @@ public class WeatherHttpClient {
 	private static String BASE_URL = "http://api.openweathermap.org/data/2.5/weather?";
     private static String FORECAST_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
 	
-	public String getWeatherData(String location) {
+	public String getWeatherData(Double latitude,Double longitude,String unitSystem) {
 		HttpURLConnection con = null ;
 		InputStream is = null;
 
 		try {
-			con = (HttpURLConnection) ( new URL(BASE_URL + "q=" + location + "&type=accurate")).openConnection();
+			con = (HttpURLConnection) ( new URL(BASE_URL + "lat=" + latitude +"&lon="+longitude+ "&type=accurate&units="+unitSystem)).openConnection();
 			con.setRequestMethod("GET");
 			con.setRequestProperty("x-api-key", "54b8edccc652317dcb64c02bc99dda8a");
 			con.setDoInput(true);
@@ -47,12 +47,12 @@ public class WeatherHttpClient {
 				
 	}
 
-    public String getForecast(String location) {
+    public String getForecast(Double latitude,Double longitude, String unitSystem) {
         HttpURLConnection con = null ;
         InputStream is = null;
 
         try {
-            con = (HttpURLConnection) ( new URL(FORECAST_URL + "q=" + location + "&type=accurate&cnt=7")).openConnection();
+            con = (HttpURLConnection) ( new URL(FORECAST_URL + "lat=" + latitude +"&lon="+longitude+ "&type=accurate&cnt=7&units="+unitSystem)).openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("x-api-key", "54b8edccc652317dcb64c02bc99dda8a");
             con.setDoInput(true);
